@@ -63,8 +63,7 @@ class ChatHandler implements URLHandler {
     }
     // expect /semantic-analysis?user=<name>
     else if (url.getPath().equals("/semantic-analysis")) {
-      String[] params = url.getQuery().split("&");
-      String[] shouldBeUser = params[0].split("=");
+      String[] shouldBeUser = url.getQuery().split("=");
       String matchingMessages = "";
       if (shouldBeUser[0].equals("user")) {
         String[] chatHistoryArr = this.chatHistory.split("\n\n");
@@ -75,7 +74,7 @@ class ChatHandler implements URLHandler {
           String analysis = "";
           index += 1;
           int[] codePoints = new int[0];
-          if (line.contains(shouldBeUser[1]))
+          if (line.startsWith(shouldBeUser[1]))
             codePoints = line.codePoints().toArray();
             int characterIndex = 0;
             while (characterIndex < codePoints.length) {
@@ -88,9 +87,8 @@ class ChatHandler implements URLHandler {
               }
               if (new String(Character.toChars(character)).equals("🥹")) {
                 analysis = " This message has a awwww vibe.";
-              } else {
+              }
               characterIndex += 1;
-               }
             }
             if (numberOfExclamationMarks > 2) {
               analysis += " This message ends forcefully.";
